@@ -506,6 +506,50 @@ class PhpSerial
     }
 
     /**
+     * Configures with parameters string.
+     *
+     * @param  string $parameters Connection configuration parameters
+     * @return bool
+     **/
+    public function confRaw($parameters)
+    {
+        if ($this->_dState !== SERIAL_DEVICE_SET) {
+            trigger_error("Unable to set the baud rate : the device is " .
+                          "either not set or opened", E_USER_WARNING);
+
+            return false;
+        }
+
+        if ($this->_os === "linux") {
+            $ret = $this->_exec(
+                "stty -F " . $this->_device . " " . $parameters,
+                $out
+            );
+        } elseif ($this->_os === "osx") {
+            $ret = $this->_exec(
+                "stty -f " . $this->_device . " " . $parameters,
+                $out
+            );
+        } else {
+            $ret = $this->_exec(
+                "mode " . $this->_winDevice . " " . $parameters,
+                $out
+            );
+        }
+
+        if ($ret === 0) {
+            return true;
+        }
+
+        trigger_error(
+            "Unable to set connection parameters : " . $out[1],
+            E_USER_ERROR
+        );
+
+        return false;
+    }
+
+    /**
      * Sets a setserial parameter (cf man setserial)
      * NO MORE USEFUL !
      * -> No longer supported
