@@ -1,7 +1,7 @@
 <?php
-define ("SERIAL_DEVICE_NOTSET", 0);
-define ("SERIAL_DEVICE_SET", 1);
-define ("SERIAL_DEVICE_OPENED", 2);
+define("SERIAL_DEVICE_NOTSET", 0);
+define("SERIAL_DEVICE_SET", 1);
+define("SERIAL_DEVICE_OPENED", 2);
 
 /**
  * Serial port control class
@@ -36,9 +36,9 @@ class PhpSerial
     /**
      * Constructor. Perform some checks about the OS and setserial
      *
-     * @return PhpSerial
+     * @return self
      */
-    public function PhpSerial()
+    public function __construct()
     {
         setlocale(LC_ALL, "en_US");
 
@@ -64,7 +64,7 @@ class PhpSerial
         } else {
             trigger_error("Host OS is neither osx, linux nor windows, unable " .
                           "to run.", E_USER_ERROR);
-            exit();
+            exit;
         }
     }
 
@@ -223,7 +223,7 @@ class PhpSerial
             return false;
         }
 
-        $validBauds = array (
+        $validBauds = array(
             110    => 11,
             150    => 15,
             300    => 30,
@@ -508,8 +508,8 @@ class PhpSerial
     /**
      * Sets a setserial parameter (cf man setserial)
      * NO MORE USEFUL !
-     * 	-> No longer supported
-     * 	-> Only use it if you need it
+     * -> No longer supported
+     * -> Only use it if you need it
      *
      * @param  string $param parameter name
      * @param  string $arg   parameter value
@@ -582,7 +582,8 @@ class PhpSerial
             // Behavior in OSX isn't to wait for new data to recover, but just
             // grabs what's there!
             // Doesn't always work perfectly for me in OSX
-            $content = ""; $i = 0;
+            $content = "";
+            $i = 0;
 
             if ($count !== 0) {
                 do {
@@ -601,7 +602,8 @@ class PhpSerial
             return $content;
         } elseif ($this->_os === "windows") {
             // Windows port reading procedures still buggy
-            $content = ""; $i = 0;
+            $content = "";
+            $i = 0;
 
             if ($count !== 0) {
                 do {
@@ -694,7 +696,9 @@ class PhpSerial
 
         $retVal = proc_close($proc);
 
-        if (func_num_args() == 2) $out = array($ret, $err);
+        if (func_num_args() == 2) {
+            $out = array($ret, $err);
+        }
         return $retVal;
     }
 
